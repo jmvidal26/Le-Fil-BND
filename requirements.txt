@@ -1,0 +1,35 @@
+python-dotenv
+psutil
+cryptography
+bcrypt
+PyJWT
+pyyaml
+SpeechRecognition
+pyttsx3
+gTTS
+ollama
+playsound3
+opencv-python
+opencv-contrib-python
+google-generativeai
+google-genai
+Pillow
+mediapipe
+tensorflow
+numpy
+openai-whisper>=20231117
+transformers
+torch
+spacy
+psutil
+paramiko
+
+# ============================================================ #
+#          INSTRUCCIONES DE INSTALACIÓN
+# ============================================================ #
+# Instalar todo:
+#   pip install -r requirements.txt
+#
+# Instalar modelo de español para spacy:
+#   python -m spacy download es_core_news_sm
+# ============================================================ #

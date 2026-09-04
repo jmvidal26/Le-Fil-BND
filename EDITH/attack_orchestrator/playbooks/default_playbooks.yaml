@@ -1,0 +1,79 @@
+# Playbook: Escaneo de puertos
+name: "Escaneo básico de puertos"
+description: "Escanea puertos comunes en el objetivo usando Nmap"
+conditions: []
+steps:
+  - command: "nmap -p 21,22,23,25,53,80,110,111,135,139,143,443,445,993,995,1723,3306,3389,5900,8080,8443 {target}"
+    description: "Escaneo de puertos comunes"
+    delay: 2
+    timeout: 60
+  - command: "nmap -sV -p 80,443 {target}"
+    description: "Detección de versiones HTTP"
+    delay: 2
+    timeout: 30
+
+# Playbook: Fuerza bruta SSH
+name: "Fuerza bruta SSH"
+description: "Prueba credenciales comunes en SSH con Hydra"
+conditions:
+  - service: "ssh"
+    port: 22
+steps:
+  - command: "hydra -l root -P /usr/share/wordlists/rockyou.txt {target} ssh -t 4"
+    description: "Fuerza bruta SSH con Hydra (root)"
+    delay: 5
+    timeout: 300
+  - command: "hydra -l admin -P /usr/share/wordlists/rockyou.txt {target} ssh -t 4"
+    description: "Fuerza bruta SSH con Hydra (admin)"
+    delay: 5
+    timeout: 300
+
+# Playbook: Escaneo de vulnerabilidades web
+name: "Escaneo de vulnerabilidades web"
+description: "Escanea vulnerabilidades HTTP/HTTPS con Nikto y Nmap scripts"
+conditions:
+  - service: "http"
+    port: 80
+  - service: "https"
+    port: 443
+steps:
+  - command: "nmap --script http-vuln-* -p 80,443 {target}"
+    description: "Escaneo de vulnerabilidades HTTP con Nmap scripts"
+    delay: 3
+    timeout: 120
+  - command: "nikto -h {target} -port 80 -ssl -nossl -timeout 10"
+    description: "Escaneo con Nikto"
+    delay: 3
+    timeout: 180
+
+# Playbook: Enumeración SMB
+name: "Enumeración SMB"
+description: "Enumera recursos compartidos SMB y usuarios"
+conditions:
+  - service: "smb"
+    port: 445
+  - service: "microsoft-ds"
+    port: 445
+steps:
+  - command: "smbclient -L {target} -N"
+    description: "Listar recursos SMB (anónimo)"
+    delay: 2
+    timeout: 30
+  - command: "enum4linux {target}"
+    description: "Enumeración completa con enum4linux"
+    delay: 5
+    timeout: 120
+
+# Playbook: Fuerza bruta RDP
+name: "Fuerza bruta RDP"
+description: "Prueba credenciales comunes en RDP con Crowbar"
+conditions:
+  - service: "ms-wbt-server"
+    port: 3389
+  - service: "rdp"
+    port: 3389
+steps:
+  - command: "crowbar -b rdp -s {target}/32 -u root -C /usr/share/wordlists/rockyou.txt -n 1"
+    description: "Fuerza bruta RDP con Crowbar"
+    delay: 5
+    timeout: 300

