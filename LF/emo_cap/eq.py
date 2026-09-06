@@ -160,3 +160,27 @@ else:
 #=============================================#
 #---------------TEST-(O_O)--------------------#
 #=============================================#
+
+image_path = os.path.join(script_dir, "processed", "proc_capture_20260906_132157.jpg")
+frame = cv.imread(image_path)
+
+if frame is None:
+    print(f"Error: Could not load image from {image_path}")
+else:
+    # Preprocess image: convert to grayscale and resize to (64, 64)
+    if len(frame.shape) == 3:
+        gray = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+    else:
+        gray = frame
+    resized = cv.resize(gray, (64, 64))
+
+    # Add batch and channel dimensions: (1, 64, 64, 1)
+    img_array = tf.expand_dims(resized, 0)
+    img_array = tf.expand_dims(img_array, -1)
+
+    # PREDICTS
+    preds = model(img_array, training=False)
+    label = emotions[np.argmax(preds.numpy())]
+
+    print(f"Predicted emotion: {label}")
+    print(f"Probabilities: {preds.numpy()[0]}")
