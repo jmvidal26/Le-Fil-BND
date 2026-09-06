@@ -32,9 +32,9 @@ def train():
         char_key = chr(key) if key != 255 else ''
         
         folder = None
-        if char_key == 'h': folder = 'hap'
-        elif char_key == 'a': folder = 'ang'
-        elif char_key == 'n': folder = 'neu'
+        if char_key == 'h': folder = 'happy'
+        elif char_key == 'a': folder = 'angry'
+        elif char_key == 'n': folder = 'neutral'
         elif char_key == 's': folder = 'sad'
         
         if folder:
@@ -111,4 +111,5 @@ def capture_loop(interval_minutes=20):
 
 
 if __name__ == "__main__":
+    print("Activo")
     capture_photo()

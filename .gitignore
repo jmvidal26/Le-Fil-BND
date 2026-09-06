@@ -1,2 +1,5 @@
 /.venv
 /.vscode
+/LF/emo_cap/processed
+/LF/emo_cap/dataset/train
+/LF/emo_cap/captures
